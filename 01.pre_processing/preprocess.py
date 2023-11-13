@@ -7,7 +7,8 @@ import torch
 
 ROOT_DIR = ".\data"
 ROOT_DIR_SUB = "D:\minseo"
-ROOT_DATA_DIR = os.path.join(ROOT_DIR, "data_origin","JL_230829_ML6")
+# ROOT_DATA_DIR = os.path.join(ROOT_DIR, "data_origin","JL_230829_ML6")
+ROOT_DATA_DIR = "D:\\blood_quality_prediction\\data\\data_origin\\JL_230829_ML6"
 ROOT_TARGET_DIR = os.path.join(ROOT_DIR, "data_specto","JL_230829_ML6")
 SAVE_CSV = False  # set save format CSV or np file
 

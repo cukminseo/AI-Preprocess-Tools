@@ -8,7 +8,7 @@ import time
 def get_spectrogram_dn(data):
     amplitudes = data
 
-    y = librosa.stft(amplitudes, n_fft=1024, hop_length=4, win_length=32)
+    y = librosa.stft(amplitudes, n_fft=512, hop_length=16, win_length=32)
     #n_fft: fft point-주파수 1024개로 쪼개기
     # hop_length: shift size
     # win_length: frame length
@@ -32,25 +32,22 @@ def get_filePaths_arr(root):
 
     return file_paths #[sub_dirs, data],[sub_dirs, data],...
 
-def set_folder(root, sub_dir1,sub_dir2):
+def set_folder(path):
     try:
-        os.mkdir(root)
-    except FileExistsError:
-        pass
-    try:
-        os.mkdir(os.path.join(root,sub_dir1))
-    except FileExistsError:
-        pass
-    try:
-        os.mkdir(os.path.join(root,sub_dir1,sub_dir2))
+        os.makedirs(path)
     except FileExistsError:
         pass
 
+def cross_platform_path(input_path: str) -> str:
+    # Split the input path by backslashes (considering both escaped and non-escaped backslashes)
+    path_parts = input_path.split("\\") if "\\" in input_path else input_path.split("\\")
 
+    # Use os.path.join to construct the platform-independent path
+    return os.path.join(*path_parts)
 
-def test():
-    for i in tqdm(range(100), desc="tqdm description"):
-        time.sleep(0.01)
+# def test():
+#     for i in tqdm(range(100), desc="tqdm description"):
+#         time.sleep(0.01)
 
 if __name__ == '__main__':
-    test()
+    print(cross_platform_path("D:\\blood_quality_prediction\data\data_origin\JL_230829_ML6"))

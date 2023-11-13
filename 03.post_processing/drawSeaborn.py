@@ -43,9 +43,8 @@ file_list = [
     if os.path.isfile(os.path.join(folder_path, f)) and f.endswith(".pth")
 ]
 
-for file in file_list:
-    print(file)
-    cm = torch.load(f"{folder_path}/{file}")
+for file in tqdm(file_list, desc="draw:"):
+    cm = torch.load(f"{folder_path}/{file}", map_location="cpu")
 
     dpi_val = 68.84
     plt.figure(figsize=(1024 / dpi_val, 768 / dpi_val), dpi=dpi_val)
@@ -58,9 +57,9 @@ for file in file_list:
         index=classes,
         columns=classes,
     )
-
-    # heatmap 그리기
-    cax = sn.heatmap(df_cm, annot=True, fmt=".2f", cmap="Blues", cbar=True)
+    # Heatmap 그리기
+    cax = sn.heatmap(df_cm, annot=True, fmt=".2f", cmap="Blues", annot_kws={"size": 20},
+                     cbar=True)  # heatmap의 숫자 글자 크기 조절
 
     # 컬러바 객체 얻기
     cbar = cax.collections[0].colorbar
@@ -68,9 +67,12 @@ for file in file_list:
     # 컬러바 눈금 라벨의 글자 크기 설정
     cbar.ax.tick_params(labelsize=18)
 
+    plt.xticks(fontsize=18)  # x축 틱 레이블의 글자 크기를 14로 설정
+    plt.yticks(fontsize=18)  # y축 틱 레이블의 글자 크기를 14로 설정
+
     plt.xlabel("Predicted labels", labelpad=20, fontsize=25)
     plt.ylabel("True labels", labelpad=20, fontsize=25)
-    # plt.title("Confusion Matrix")
+    # plt.title("Confusion Matrix", fontsize=16)   # 제목 글자 크기 조절
     plt.tight_layout()
 
     save_path = os.path.join(save_folder_path, file.replace(".pth", ".png"))
