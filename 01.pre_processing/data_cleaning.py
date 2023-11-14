@@ -11,7 +11,7 @@ from tqdm import tqdm
 import matplotlib.cm as cm
 
 
-def data_cleansing(data, threshold):
+def data_cleansing(data, threshold=0.04):
     if 'Time' in data.columns:
         data.set_index('Time', inplace=True)
 
@@ -21,7 +21,7 @@ def data_cleansing(data, threshold):
     2:정제 후 z-score 출력
     3:정제 후 데이터 출력
     '''
-    mode = 3
+    mode = 1
     # threshold = 9999
 
     mean_values = data.mean(axis=1)
@@ -46,11 +46,21 @@ def data_cleansing(data, threshold):
             cnt_sel += 1
     print(f"전체 데이터 갯수 : {cnt_all}")
     print(f"정제 후 데이터 갯수 : {cnt_sel}")
-    plt.title('Time Series Data Visualization', fontsize=18)
+    plt.title('Z-score', fontsize=18)
+    if mode == 1:
+        plt.title('absolute differences from the mean', fontsize=18)
+    elif mode == 2:
+        plt.title('Z-score', fontsize=18)
+    elif mode == 3:
+        plt.title('Time Series Data Visualization', fontsize=18)
     plt.xlabel('Time', fontsize=18)
     plt.ylabel('Value', fontsize=18)
     plt.xticks(fontsize=16)
     plt.yticks(fontsize=16)
+    if mode == 1:
+        plt.ylim(-0.18,0.18)
+    elif mode == 2:
+        plt.ylim(-1.8, 1.8)
     plt.grid(True)
     plt.tight_layout()
     plt.show()
@@ -58,7 +68,7 @@ def data_cleansing(data, threshold):
 
 
 if __name__ == "__main__":
-    Data_path = "D:\\blood_quality_prediction\\data\\data_origin\\JL_230829_ML6\\145_output"
-    data = pd.read_csv(os.path.join(Data_path, '2.csv'))
+    Data_path = "D:\\blood_quality_prediction\\data\\data_origin\\JL_230829_ML6\\0_output"
+    data = pd.read_csv(os.path.join(Data_path, '1.csv'))
     data = data.rename(columns={'Unnamed: 170': '170'})
-    data_cleansing(data, 0.03)
+    data_cleansing(data)
