@@ -1,37 +1,21 @@
+import pandas as pd
+import torch
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sn
+import os
+from tqdm import tqdm
+
 classes = [
-    "0mg/dL",
-    "50mg/dL",
-    "60mg/dL",
-    "70mg/dL",
-    "75mg/dL",
-    "80mg/dL",
-    "85mg/dL",
-    "90mg/dL",
-    "95mg/dL",
-    "100mg/dL",
-    "105mg/dL",
-    "110mg/dL",
-    "115mg/dL",
-    "120mg/dL",
-    "125mg/dL",
-    "130mg/dL",
-    "135mg/dL",
-    "140mg/dL",
-    "145mg/dL",
-    "150mg/dL",
-    "160mg/dL",
-    "170mg/dL",
-    "180mg/dL",
-    "190mg/dL",
-    "200mg/dL",
-    "210mg/dL",
-    "220mg/dL",
-    "230mg/dL",
-    "240mg/dL",
-    "250mg/dL",
-]
-folder_path = "./confusion_matrix"
-save_folder_path = "./confusion_matrix_remake"
+        "1mg/1L",
+        "5mg/1L",
+        "15mg/1L",
+        " 1mg/50mL ",
+        " 5mg/50mL ",
+        " 15mg/50mL ",
+    ]
+folder_path = "./effi"
+save_folder_path = "./effi_change"
 
 if not os.path.exists(save_folder_path):
     os.makedirs(save_folder_path)
@@ -58,22 +42,45 @@ for file in tqdm(file_list, desc="draw:"):
         columns=classes,
     )
     # Heatmap 그리기
-    cax = sn.heatmap(df_cm, annot=True, fmt=".2f", cmap="Blues", annot_kws={"size": 20},
-                     cbar=True)  # heatmap의 숫자 글자 크기 조절
+
+    cax = sn.heatmap(df_cm, annot=True, fmt=".2f", cmap="Blues", annot_kws={"size": 35,"weight": "bold"}, cbar=True)  # heatmap의 숫자 글자 크기 조절
 
     # 컬러바 객체 얻기
     cbar = cax.collections[0].colorbar
 
     # 컬러바 눈금 라벨의 글자 크기 설정
-    cbar.ax.tick_params(labelsize=18)
+    cbar.ax.tick_params(labelsize=30)
+    for label in cbar.ax.get_yticklabels():
+        label.set_weight('bold')
 
-    plt.xticks(fontsize=18)  # x축 틱 레이블의 글자 크기를 14로 설정
-    plt.yticks(fontsize=18)  # y축 틱 레이블의 글자 크기를 14로 설정
+    # plt.xticks(fontsize=25, weight='bold', rotation=20)  # x축 틱 레이블의 글자 크기를 14로 설정
+    # plt.yticks(fontsize=25, weight='bold', rotation=20)  # y축 틱 레이블의 글자 크기를 14로 설정
+    plt.xticks(fontsize=18, weight='bold')  # x축 틱 레이블의 글자 크기를 14로 설정
+    plt.yticks(fontsize=18, weight='bold')  # y축 틱 레이블의 글자 크기를 14로 설정
 
-    plt.xlabel("Predicted labels", labelpad=20, fontsize=25)
-    plt.ylabel("True labels", labelpad=20, fontsize=25)
+    # 특정 레이블의 글자 크기 변경
+    # ax = plt.gca()  # 현재 축 가져오기
+    # xlabels = ax.get_xticklabels()  # x축 레이블 리스트
+    # ylabels = ax.get_yticklabels()  # y축 레이블 리스트
+    #
+    # z`# 첫 번째 레이블의 글자 크기 변경
+    # xlabels[0].set_fontsize(20)
+    # xlabels[1].set_fontsize(20)
+    # xlabels[2].set_fontsize(20)
+    # ylabels[0].set_fontsize(20)
+    # ylabels[1].set_fontsize(20)
+    # ylabels[2].set_fontsize(20)
+    #
+    # # 변경된 레이블 설정
+    # ax.set_xticklabels(xlabels)
+    # ax.set_yticklabels(ylabels)
+
+
+    plt.xlabel("Predicted labels", labelpad=20, fontsize=35, weight='bold')
+    plt.ylabel("True labels", labelpad=20, fontsize=35, weight='bold')
     # plt.title("Confusion Matrix", fontsize=16)   # 제목 글자 크기 조절
     plt.tight_layout()
+    plt.subplots_adjust(right=1.02)
 
     save_path = os.path.join(save_folder_path, file.replace(".pth", ".png"))
     plt.savefig(save_path)
